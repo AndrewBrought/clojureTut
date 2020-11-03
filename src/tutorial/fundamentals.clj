@@ -1,7 +1,7 @@
 (ns tutorial.fundamentals
   (:require
     [clojure.string :as str]))
-
+; Start REPL with cmd + r
 ; Once the REPL is started we can use shift + cmd + p to
 ; run a line in the REPL box - BUT - first
 ; we need to run the doc-name line first
@@ -151,6 +151,121 @@
 
 ; Atoms:
 
+; This Function demonstrates how we can change values of a variable using atoms
+; ** Note the order in which lines are printed based on state
+(defn atom-ex
+  [x]
+
+  (def atomEx (atom x))
+
+  (add-watch atomEx :watcher
+             (fn [key atom old-state new-state]
+               ( println "atomEx changed from "
+                      old-state " to " new-state)))
+
+  (println "1st x" @atomEx)
+  (reset! atomEx 10)
+  (println "2nd x" @atomEx)
+  (swap! atomEx inc)
+  (println "We incremented x by 1 to =" @atomEx)
+  )
+
+; Another way to change values is through agents
+; Agents allow us to change values using functions
+(defn agent-ex
+  []
+
+  ;This as is will yield "Tickets 0" because it doesn't wait for the value to update before printing
+  (def tickets-sold (agent 0))
+  (send tickets-sold + 15)
+  ;This will also not allowing for the updated value to be recorded
+  (println)
+  (println "Tickets " @tickets-sold)
+
+  ;We call the await-for function and then the incrementation will be recorded
+  (send tickets-sold + 10)
+  (await-for 100 tickets-sold)
+  (println "New Total Tickets " @tickets-sold)
+
+  ;This closes the "program" so that it's not still waiting for 100
+  (shutdown-agents)
+
+  )
+
+; Math functions
+(defn math-stuff
+  []
+
+  (println (+ 1 2 3))
+  (println (- 5 2 1))
+  (println (* 2 5))
+  (println (/ 10 5))
+  ; mod stands for mod (%)
+  (println (mod 2 0))
+
+  (println (inc 5))                                         ;; increment
+  (println (dec 5))                                         ;; decrement
+
+  (println (Math/abs -10))                                  ;;Absolute value
+  (println (Math/cbrt 8))                                  ;;Cube Root
+  (println (Math/sqrt 4))                                  ;;Square Root
+  (println (Math/ceil 4.5))                                  ;;Round up
+  (println (Math/floor 4.5))                                  ;;Round down
+  (println (Math/exp 1))                                  ;;e to the power of 1
+  (println (Math/hypot 2 2))                                  ;;sqrt(x^2 + y^2)
+  (println (Math/log 2.71828))                                  ;;Natural logarithm
+  (println (Math/log10 100))                                  ;;Base 10 log
+  (println (Math/max 1 5))                                  ;;
+  (println (Math/min 1 5))                                  ;;
+  (println (Math/pow 2 2))                                  ;;Power
+
+  ; This will provide a random int up to but not include 20
+  (println (rand-int 20))
+
+  (println (reduce + [1 2 3]))
+
+  (println Math/PI)
+
+  )
+
+
+; Functions
+
+(defn say-hello
+  "Receives a name with one parameter and responds"
+  [name]
+
+  (println "Hello again" name)
+
+  )
+
+
+(defn get-sum
+  [x y]
+  ; By default whatever the output of the last operation from your function is what the return will be
+  (+ x y))
+
+(defn get-sum-more
+  ([x y z]
+   (+ x y z))
+
+  ([x y]
+   (+ x y)))
+
+(defn hello-you
+  [name]
+
+  (str "Hello " name))
+
+; this is defining a list of names that we can pass as parameters that we are then feeding through by way
+;of the map method into our hello-you function
+(defn hello-all
+  [& names]
+  (map hello-you names))
+
+
+; decision making/ relational operators
+
 
 
 (defn -main
@@ -168,5 +283,6 @@
   (println (str/replace "I am 42" #"42" "665"))
   (println (str/upper-case str1))
 
+  (atom-ex 5)
 
   )
