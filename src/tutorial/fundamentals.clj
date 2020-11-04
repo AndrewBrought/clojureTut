@@ -263,8 +263,66 @@
   [& names]
   (map hello-you names))
 
+; simple comparison function
+(defn can-vote
+  [age]
+  (if (>= age 18)
+    ( println "You can vote!")
+    (println "You cannot vote...")
+    ))
 
-; decision making/ relational operators
+(defn can-do-more
+  [age]
+  (if (>= age 18)
+    (do (println "You can drive")
+        (println "You can vote"))
+    (println "You are not 18 or over...")))
+
+(defn when-ex
+  [tof]
+  (when tof
+    (println "1st thing")
+    (println "2nd thing")))
+
+(defn what-grade
+  [n]
+  (cond
+    (< n 6) (println "Preschool")
+    (= n 6) (println "Kindergarten")
+    (and (> n 6) (<= n 18)) (format "You are in grade %d"
+                                    (- n 6))
+    :else "Go to College"))
+
+; Looping
+
+(defn one-to-x
+  [x]
+  ;We are using an atom to increment a value because atoms allow us to change a value
+  (def i (atom 1))
+  (while (<= @i x)
+    (do
+      (println @i)
+      ; to increment you use "swap! i inc"
+      (swap! i inc))))
+
+;This will execute a statement a set number of times
+; As i has no value it's value is zero based so if 4 is passed to x it increments as follows: 0 1 2 3
+(defn dbl-to-x
+  [x]
+  (dotimes [i x]
+    (println (* i 2))))
+
+
+(defn fizz-buzz
+     [start finish]
+     (map (fn [n]
+    (cond
+      (zero? (mod n 15)) "Fizz-Buzz"
+      (zero? (mod n 5)) "Buzz"
+      (zero? (mod n 3)) "Fizz"
+      :else n))
+    (range start (+ finish 1))))
+
 
 
 
