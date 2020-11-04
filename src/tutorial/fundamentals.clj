@@ -323,6 +323,58 @@
       :else n))
     (range start (+ finish 1))))
 
+;Loop: loop is going to go through values using a statement called recur to change the value
+; until a condition is no longer true
+(defn triple-to-x
+  [x y]
+;  starting value of i
+  (loop [i x]
+    ; while i is less than i,
+    (when (< i y)
+      ; we record i * 3
+      (println (* i 3))
+      ;increment i + 1
+      (recur (+ i 1)))))
+
+; do sequence
+(defn print-list
+  ;'&' means list
+  [& nums]
+  ; x is acting as the temp holding cell for each value of nums
+  (doseq [x nums]
+    ;so this will iterate through the list and print out the value at each index...I am going to
+    ; play with this and effect the value of x
+    (println (* x 7))))
+
+; Using File io to read/write to files
+(use 'clojure.java.io)
+
+(defn write-to-file
+  [file text]
+  (with-open [wrtr (writer file)]
+    (.write wrtr text)))
+
+(defn read-from-file
+  [file]
+  (try
+    ;slurp is the command used to read from a file
+    (println (slurp file))
+
+  (catch Exception e (println "Error: " (.getMessage
+                                          e)))))
+
+(defn append-to-file
+  [file text]
+  (with-open [wrtr (writer file :append true)]
+    (.write wrtr text)))
+
+(defn read-line-from-file
+  [file]
+  (with-open [rdr (reader file)]
+    (doseq [line (line-seq rdr)]
+      (println line))))
+
+
 
 
 
@@ -330,17 +382,22 @@
   [& args]
 
   ; STRiNGS
-  (def str1 "tHis is my string 1")
+  ;(def str1 "tHis is my string 1")
+  ;
+  ;(println (str/blank? str1))
+  ;(println (str/includes? str1 "my"))
+  ;(println (str/index-of str1 "my"))
+  ;(println (str/split str1 #"\d"))
+  ;(println (str/split str1 #" "))
+  ;(println (str/join " " ["The" "Big" "Lebowski"]))
+  ;(println (str/replace "I am 42" #"42" "665"))
+  ;(println (str/upper-case str1))
+  ;
+  ;(atom-ex 5)
 
-  (println (str/blank? str1))
-  (println (str/includes? str1 "my"))
-  (println (str/index-of str1 "my"))
-  (println (str/split str1 #"\d"))
-  (println (str/split str1 #" "))
-  (println (str/join " " ["The" "Big" "Lebowski"]))
-  (println (str/replace "I am 42" #"42" "665"))
-  (println (str/upper-case str1))
-
-  (atom-ex 5)
+  (write-to-file "test.txt" "This is the first sentence in this file\n")
+  ;(read-from-file "test.txt")
+  (append-to-file "test.txt" "This is the second sentence appended\n")
+  (read-line-from-file "text.txt")
 
   )

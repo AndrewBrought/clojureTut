@@ -1,0 +1,2 @@
+Sentence one of file
+This is the second sentence
